@@ -1,0 +1,310 @@
+.profile {
+    background-color: rgba(251, 250, 250, 0.801);
+    min-height: 100%;
+
+    .top {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        padding: 20px;
+
+        .img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            overflow: hidden;
+            cursor: pointer;
+            background-color: var(--color-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                transition: .4s;
+            }
+
+            span {
+                color: white;
+                font-size: 60px;
+                font-weight: bold;
+                text-transform: uppercase;
+                transition: .4s;
+            }
+
+            &:hover {
+
+                img,
+                span {
+                    transform: scale(1.2);
+                    font-size: 100px;
+                }
+            }
+        }
+
+        .nom {
+
+            h3 {
+                font-size: 25px;
+                color: rgb(67, 67, 67);
+                text-transform: capitalize;
+            }
+
+            h4 {
+                color: var(--color-primary);
+            }
+        }
+    }
+
+    .infos-perso {
+        padding: 5px 30px;
+        margin: 0 auto;
+        width: 50%;
+        margin: 0 auto;
+        color: black;
+
+        h3 {
+            position: relative;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--color-primary);
+            text-transform: capitalize;
+            width: fit-content;
+
+            &::after {
+                position: absolute;
+                content: '';
+                height: 2px;
+                width: 100%;
+                background-color: var(--color-primary);
+                bottom: -3px;
+                left: 0;
+                border-radius: 20px;
+            }
+        }
+
+        .addfroms {}
+
+        form {
+            display: grid;
+            padding: 20px 0;
+            gap: 30px;
+
+            grid-template-columns: 1fr 1fr;
+
+            .form-item {
+                width: 100%;
+
+
+                label {
+                    color: rgb(111, 111, 111);
+                    font-size: 11px;
+                }
+
+                input {
+                    padding: 10px 0 10px 20px;
+                    border-radius: 5px;
+                    width: 100%;
+                    font-size: 18px;
+                    background-color: rgba(251, 250, 250, 0.801);
+                    border: 1px solid rgb(129, 129, 129);
+                }
+
+
+            }
+
+            .w-100 {
+                input {
+                    width: 100%;
+                }
+            }
+
+
+            .profil-btns {
+                display: flex;
+                justify-content: flex-end;
+                gap: 20px;
+
+                button {
+                    width: 140px;
+                    padding: 10px 0;
+                    background-color: var(--color-primary);
+                    color: white;
+                    border: 1px solid var(--color-primary);
+                    transition: .4s;
+
+                    &:hover {
+                        opacity: .6;
+                    }
+
+                    &:disabled {
+                        opacity: .6;
+                        cursor: initial;
+                    }
+                }
+
+                .spinner {
+                    font-size: 25px !important;
+                    width: 120px;
+                    height: 40px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+
+            }
+        }
+    }
+
+
+}
+
+.img-details {
+    background-color: #f0f4f4;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+
+    .top {
+        padding: 40px 0;
+        width: 60%;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: black;
+
+        .back {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+
+            svg {
+                width: 18px;
+            }
+
+            h3 {
+                font-weight: 500;
+                letter-spacing: .4px;
+                font-size: 13px;
+            }
+
+            button {
+                text-decoration: none;
+                color: var(--color-primary);
+                font-weight: bold;
+                font-size: 14px;
+                transition: .3s;
+                cursor: pointer;
+                background-color: transparent;
+
+                &:hover {
+                    opacity: .5;
+                }
+            }
+
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+
+            button {
+                background-color: transparent;
+                padding: 5px 7px;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: .4s;
+
+                svg {
+                    width: 17px;
+                    transition: .4s;
+                }
+            }
+
+            .edite {
+
+                /* input {
+                    background-color: red;
+                    width: 10%;
+                } */
+
+                label {
+                    cursor: pointer;
+                }
+
+                svg {
+                    color: var(--color-primary);
+                }
+
+                &:hover {
+                    background-color: var(--color-primary);
+
+                    svg {
+                        color: white;
+                    }
+
+                }
+            }
+
+            .delete {
+                svg {
+                    color: red;
+                }
+
+                &:hover {
+                    background-color: red;
+
+                    svg {
+                        color: white;
+                    }
+
+                }
+            }
+
+        }
+    }
+
+    .img-main {
+        width: 60%;
+        margin: 0 auto;
+        height: 80vh;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .nom-image {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            user-select: none;
+
+            img {
+                width: 400px;
+                mix-blend-mode: multiply;
+            }
+
+            p {
+                font-size: 12px;
+            }
+        }
+    }
+
+
+}

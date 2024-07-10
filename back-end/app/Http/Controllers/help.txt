@@ -1,0 +1,157 @@
+ public function EmailSend(Request $request)
+    {
+        $email = $request->email;
+        $flag = false;
+        $stat = '';
+
+        $v = Validator::make($request->all(), [
+            'email' => 'required',
+        ]);
+        if ($v->fails()) {
+            return response()->json(['message' => 'Tous les champs sont obligatoir', 'status' => false]);
+        } else {
+            if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
+                return response()->json(['message' => 'Email invalide', 'status' => false]);
+            } else {
+                if (Stagaire::where('email', $email)->exists()) {
+                    $flag = true;
+                    $stat = 'stagaire';
+                } else if (Entreprise::where('email', $email)->exists()) {
+                    $stat = 'entreprise';
+                    $flag = true;
+                } else {
+                    return response()->json(['message' => 'Email not found', 'status' => false]);
+                }
+                if ($flag == true) {
+                    $code = rand(100000, 999999);
+                    Mail::to($email)->send(new verificationMail($code));
+                    return response()->json(['message' => 'Vous avez recus un code de verification', 'code' => $code, 'status' => $stat]);
+                }
+            }
+        }
+    }
+
+
+    public function ResetPswd(Request $request)
+    {
+        $email = $request->email;
+        $pswd = $request->pswd;
+        $v = Validator::make($request->all(), [
+            'pswd' => 'required',
+        ]);
+        if ($v->fails()) {
+            return response()->json(['message' => 'Tous les champs sont obligatoir', 'status' => false]);
+        } else {
+            if (strlen($pswd) < 8) {
+                return response()->json(['message' => 'Le mot de passe doit contenir au moins 8 caractères.', 'status' => false]);
+            }
+
+            if (preg_match('/[A-Z]/', $pswd) === 0) {
+                return response()->json(['message' => 'Le mot de passe doit contenir au moins une lettre majuscule.', 'status' => false]);
+            }
+
+            if (preg_match('/\d/', $pswd) === 0) {
+                return response()->json(['message' => 'Le mot de passe doit contenir au moins un chiffre.', 'status' => false]);
+            }
+
+            if (preg_match('/[!@#,\'\/$%^&*.+-=_{}?><;:]/', $pswd) === 0) {
+                return response()->json(['message' => 'Le mot de passe doit contenir au moins un caractère spécial comme !@#$%^&*.', 'status' => false]);
+            }
+            if ($stagaire =  Stagaire::where('email', $email)->first()) {
+                $stagaire->password = $pswd;
+                $stagaire->update();
+                return response()->json(['message' => 'Votre mot de pass a ete bien modifier !', 'status' => true]);
+            }
+            if ($entrepeis =  Entreprise::where('email', $email)->first()) {
+                $entrepeis->password = $pswd;
+                $entrepeis->update();
+                return response()->json(['message' => 'Votre mot de pass a ete bien modifier !', 'status' => true]);
+            }
+        }
+    }
+
+
+    public function registerStagaireCheck(Request $request)
+    {
+        $v = Validator::make($request->all(), [
+            'nom' => 'required|max:255',
+            'prenom' => 'required|max:255',
+            'date' => 'required',
+            'email' => 'required|max:255',
+            'pswd' => 'required|max:255',
+        ]);
+        if ($v->fails()) {
+            return response()->json(['message' => 'Tous les champs sont obligatoir', 'status' => false]);
+        } else {
+            if (filter_var($request->email, FILTER_VALIDATE_EMAIL) === false) {
+                return response()->json(['message' => 'Email invalide', 'status' => false]);
+            } else {
+                if (Stagaire::where('email', $request->email)->exists() || Entreprise::where('email', $request->email)->exists() || Admin::where('email', $request->email)->exists()) {
+                    return response()->json(['message' => 'E-mail déjà utilisé', 'status' => false]);
+                } else {
+                    if (strlen($request->pswd) < 8) {
+                        return response()->json(['message' => 'Le mot de passe doit contenir au moins 8 caractères.', 'status' => false]);
+                    }
+
+                    if (preg_match('/[A-Z]/', $request->pswd) === 0) {
+                        return response()->json(['message' => 'Le mot de passe doit contenir au moins une lettre majuscule.', 'status' => false]);
+                    }
+
+                    if (preg_match('/\d/', $request->pswd) === 0) {
+                        return response()->json(['message' => 'Le mot de passe doit contenir au moins un chiffre.', 'status' => false]);
+                    }
+
+                    if (preg_match('/[!@#,\'\/$%^&*.+-=_{}?><;:]/', $request->pswd) === 0) {
+                        return response()->json(['message' => 'Le mot de passe doit contenir au moins un caractère spécial comme !@#$%^&*.', 'status' => false]);
+                    }
+
+                    $code = rand(100000, 999999);
+                    Mail::to($request->email)->send(new verificationMail($code));
+                    return response()->json(['message' => 'Vous avez recus un code de verification', 'code' => $code, 'status' => true]);
+                }
+            }
+        }
+    }
+    public function registerEntrpriseCheck(Request $request)
+    {
+        $v = Validator::make($request->all(), [
+            'nom' => 'required|max:255',
+            'numero' => 'required|max:255',
+            'address' => 'required|max:255',
+            'tel' => 'required|max:255',
+            'idSecteur' => 'required',
+            'email' => 'required|max:255',
+            'password' => 'required|max:255',
+        ]);
+        if ($v->fails()) {
+            return response()->json(['message' => 'Tous les champs sont obligatoir', 'status' => false]);
+        } else {
+            if (filter_var($request->email, FILTER_VALIDATE_EMAIL) === false) {
+                return response()->json(['message' => 'Email invalide', 'status' => false]);
+            } else {
+                if (Stagaire::where('email', $request->email)->exists() || Entreprise::where('email', $request->email)->exists()) {
+                    return response()->json(['message' => 'E-mail déjà utilisé', 'status' => false]);
+                } else {
+                    if (strlen($request->password) < 8) {
+                        return response()->json(['message' => 'Le mot de passe doit contenir au moins 8 caractères.', 'status' => false]);
+                    }
+
+                    if (preg_match('/[A-Z]/', $request->password) === 0) {
+                        return response()->json(['message' => 'Le mot de passe doit contenir au moins une lettre majuscule.', 'status' => false]);
+                    }
+
+                    if (preg_match('/\d/', $request->password) === 0) {
+                        return response()->json(['message' => 'Le mot de passe doit contenir au moins un chiffre.', 'status' => false]);
+                    }
+
+                    if (preg_match('/[!@#,\'\/$%^&*.+-=_{}?><;:]/', $request->password) === 0) {
+                        return response()->json(['message' => 'Le mot de passe doit contenir au moins un caractère spécial comme !@#$%^&*.', 'status' => false]);
+                    }
+
+                    $code = rand(100000, 999999);
+                    Mail::to($request->email)->send(new verificationMail($code));
+                    return response()->json(['message' => 'Vous avez recus un code de verification', 'code' => $code, 'status' => true]);
+                }
+            }
+        }
+    }
